@@ -403,6 +403,7 @@
         document.getElementById('result-desc').innerText = bestMatch.desc;
         const traitsContainer = document.getElementById('result-traits');
         traitsContainer.innerHTML = bestMatch.traits.map(t => `<span class="pill">${t}</span>`).join('');
+        
         const avatarDiv = document.getElementById('player-avatar');
         avatarDiv.innerHTML = '';
         const emojiMap = {
@@ -410,8 +411,17 @@
             "Erwin Schrödinger": "🐱", "Werner Heisenberg": "❓", "Paul Dirac": "✍️", "Max Planck": "🌡️", "Richard Feynman": "🥁",
             "Alan Turing": "💻", "John von Neumann": "🎲", "Claude Shannon": "🤖"
         };
-        avatarDiv.innerHTML = emojiMap[bestMatch.name] || "🔬";
-        avatarDiv.style.fontSize = "64px";
+        if (bestMatch.img && bestMatch.img !== "") {
+            const img = document.createElement('img');
+            img.src = bestMatch.img;
+            img.alt = bestMatch.name;
+            img.onerror = () => { avatarDiv.innerHTML = emojiMap[bestMatch.name] || "🔬"; avatarDiv.style.fontSize = "64px"; };
+            avatarDiv.appendChild(img);
+        } else {
+            avatarDiv.innerHTML = emojiMap[bestMatch.name] || "🔬";
+            avatarDiv.style.fontSize = "64px";
+        }
+        
         quizScreen.classList.remove('active');
         resultScreen.classList.add('active');
     }
